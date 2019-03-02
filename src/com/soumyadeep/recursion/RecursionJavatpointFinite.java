@@ -2,9 +2,14 @@ package com.soumyadeep.recursion;
 
 public class RecursionJavatpointFinite {
 
+	static int count = 0;
+
 	static void p() {
-		System.out.println("hello");
-		p();
+		count++;
+		if (count <= 5) {
+			System.out.println("hello " + count);
+			p();
+		}
 	}
 
 	public static void main(String[] args) {

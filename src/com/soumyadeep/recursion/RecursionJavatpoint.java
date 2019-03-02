@@ -10,14 +10,9 @@ public class RecursionJavatpoint {
 	 * Inorder/Preorder/Postorder Tree Traversals, DFS of Graph, etc.
 	 */
 
-	static int count = 0;
-
 	static void p() {
-		count++;
-		if (count <= 5) {
-			System.out.println("hello " + count);
-			p();
-		}
+		System.out.println("hello");
+		p();
 	}
 
 	public static void main(String[] args) {
