@@ -1,0 +1,438 @@
+Java8FilterMapDepthFlatmap
+
+Java 8 Map, Filter, and Collect Examples
+
+Map
+The map() function is a method in the Stream class that represents a functional programming concept. In simple words, the map() is used to transform one object into other by applying a function.
+
+That's why the Stream.map(Function mapper) takes a function as an argument. For example, by using the map() function, you can convert a list of String into a List of Integer by applying the Integer.valueOf() method to each String on the input list.
+
+All you need is a mapping function to convert one object to the other. Then, the map() function will do the transformation for you. It is also an intermediate Stream operation, which means you can call other Stream methods, like a filter, or collect on this to create a chain of transformations.
+
+Filter
+The filter method, as its name suggests, filters elements based upon a condition you gave it. For example, if your list contains numbers and you only want numbers, you can use the filter method to only select a number that is fully divisible by two.
+
+The filter method essentially selects elements based on a condition you provide. That's why the filter (Predicate condition) accepts a Predicate object, which provides a function that is applied to a condition. If the condition evaluates true, the object is selected. Otherwise, it will be ignored. Similar to map, the filter is also an intermediate operation, which means you can call other Stream methods after calling the filter.
+The filter() method is also lazy, meaning it will not be evaluated until you call a reduction method, like collect, and it will stop as soon as it reaches the target.
+
+1. How to Use Map and Filter in Java 8
+
+You need a good example to understand any new concept. Since String and Integer are the most common data type in Java, I have chosen an example that is both simple and interesting.
+
+I have a list of String: numbers e.g. {"1", "2", "3", "4", "5", "6"}. I want to process this list and need another List of Integer with just even numbers.
+
+In order to find the even numbers, I first need to convert a List of String to a List of Integer. For that, I can use the map() method of java.util.Stream class. But, before that, we need a Stream as a map() as defined in the java.util.stream class.
+
+This is not difficult at all, since you can get the stream from any collection, e.g. List or Set, by calling the stream() method, which is defined in the java.util.Collection interface.
+
+The map(Function mapper) method takes a Function, technically speaking, an object of java.util.function.Function interface. This function is then applied to each element of Stream to convert it into the type you want.
+
+Because we need to convert a String to an Integer, we can pass either the Integer.parseInt() or Integer.valueOf() method to the map() function.
+I have chosen the valueOf() method because of performance and caching.
+
+The map() will then return a Stream of Integer that contains both even and odd numbers. To select just even numbers, we can use the filter() method.
+
+It takes a predicate object which is technically a function to convert an object to boolean. We pass an object and it will return true or false. The filter, then uses that information to include the object in the result stream.
+
+To include only even numbers, we call filter( number -> number%2==0), which means each number will be divided by two, and if there is no remainder, it will be selected. This is the same logic we have used while solving coding problems to check if a given number is even or odd in Java. 
+
+We are almost done. But, so far, we only have the Stream of even integers — not the List of even Integers and that's why we need to use them. 
+Since we need a List, I called collect(Collectors.toList()), which will accumulate all even numbers into a List and return.
+
+Now, you may be thinking: how does it know to return List of Integer? Well, we need to get that information by Type inference, because we have already specified that information by storing the result into a List<Integer>.
+
+2. Java 8 Map + Filter + Collect Example
+
+You can also experiment with using more map() functions or more filter() calls to make the composition longer and more sophisticated. You can even play with the collect() method to collect the result in a list, set, map or any other collection.
+
+package tool;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+/**
+ * 
+ * A simple Java Program to demonstrate how to use map and filter method Java 8.
+ * In this program, we'll convert a list of String into a list of Integer and
+ * then filter all even numbers.
+ */
+public class Hello {
+  public static void main(String[] args) {
+    List<String> numbers = Arrays.asList("1", "2", "3", "4", "5", "6");
+    System.out.println("original list: " + numbers);
+    List<Integer> even = numbers.stream()
+                                .map(s -> Integer.valueOf(s))
+                                .filter(number -> number % 2 == 0)
+                                .collect(Collectors.toList());
+    System.out.println("processed list, only even numbers: " + even);
+  }
+}
+Output
+original list: [1, 2, 3, 4, 5, 6]
+the processed list, only even numbers: [2, 4, 6]
+
+You can see that the original list contains numbers from 1 to 6, and the filtered list only contains even numbers, i.e. 2, 4, and 6.
+The most important code in this example is the following four lines of Stream processing code:
+
+*
+This code is starting with a map, then a filter, and finally a collect. You may be wondering whether the order will matter or not. Well, it does.
+Since our filter condition requires an int variable we first need to convert Stream of String to Stream of Integer. That's why we called the map() function first.
+
+Once we have the Stream of Integer, we can apply maths to find the even numbers. We passed that condition to filter method. If we needed to filter on String, e.g. select all string which has length > 2, then we would have called filter before map.
+
+That's all about how to use map and filter in Java 8. We have seen an interesting example of how we can use the map to transform an object to another and how to use filter to select an object based upon condition. We have also learned how to compose operations on stream to write code that is both clear and concise.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Java 8 Map Function Examples
+
+The map is a well known functional programming concept which is incorporated into Java 8. Map is a function defined in java.util.stream.
+
+Streams class, which is used to transform each element of the stream by applying a function to each element. Because of this property, you can use map() in Java 8 to transform a Collection, List, Set or Map. For example, if you have a list of String and you want to convert all of them into upper case, how will you do this? Prior to Java 8, there is no function to do this. You had to iterate through List using a for loop or foreach loop and transform each element. In Java 8, you get the stream, which allows you to apply many functional programming operators like the map, reduce, and filter.
+
+By using the map() function, you can apply any function to every element of Collection. It can be any predefined function or a user-defined function. You not only can use the lambda expression but also method references.
+
+Some examples of Map in Java 8 is to convert a list of integers and then the square of each number. The map function is also an intermediate operation and it returns a stream of transformed element.
+
+*
+Stream API also provides methods like mapToDouble(), mapToInt(), and mapToLong() which returns DoubleStream, IntStream and LongStream, which are specialized stream for double, int and long data types.
+
+You can collect the result of transformation by using the Collectors class, which provides several methods to collect the result of transformation into List, Set or any Collection.
+
+Even though Java is moving really fast and we are already in Java 11, still a lot of developers has to learn Java 8, particularly the functional programming aspect. If you think that your Java 8 skills are not at par or you want to improve yourself, I suggest you join a comprehensive Java course like The Complete Java MasterClass. It covers everything you need to know and also recently updated for Java 11.
+
+How to use Map in Java 8
+
+As I said, Map function in Java 8 stream API is used to transform each element of Collection be it, List, Set or Map. In this Java 8 tutorial, we have used map function for two examples, first to convert each element of List to upper case, and second to square each integer in the List.
+
+By the way, this is just tip of the iceberg of what you can do with Java 8. It's packed with many useful features and API enhancements like methods to join Strings, a new Date and Time API, Default methods and much.
+
+Now let's see an example to convert each element of a List to upper case using map function. Once again, the map applies a mapping function on each element of Stream and stores result in another Stream.
+
+package com.soumyadeep.filterMapDepth;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Java8MapExample {
+
+	/*
+	 * Java 8 example to convert each element of List into upper case. You can use
+	 * Map function of Java 8 to transform each element of List or any collection.
+	 */
+
+	public static void main(String[] args) {
+
+		List<String> cities = Arrays.asList("London", "HongKong", "Paris", "NewYork");
+		System.out.println("Original list : " + cities);
+		System.out.println("list transformed using Java 8 :" + transform(cities));
+		System.out.println("list transformed using loop before Java 8 : " + beforeJava8(cities));
+	}
+
+	/**
+	 * This is how you convert all elements of list into upper case using loop
+	 * before Java 8
+	 * 
+	 * @param listOfString
+	 * @return List with each element converted into upper case
+	 */
+
+	private static List<String> beforeJava8(List<String> cities) {
+
+		List<String> upperCities = new ArrayList<>();
+		for (String list : cities) {
+			upperCities.add(list.toUpperCase());
+		}
+		return upperCities;
+	}
+
+	private static List<String> transform(List<String> cities) {
+
+		List<String> upperCities = cities.stream().map(mapper -> mapper.toUpperCase()).collect(Collectors.toList());
+		return upperCities;
+	}
+}
+
+That's all about how you transform each element of List in Java 8 using Map function. It's tremendously useful and once you start using it, you will never look back. I found Java 8 really interesting, you will love to try it out. I really like a combination of lambda expression and Streams and solving problems without loops.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Java 8 filter + Stream Code Example
+
+In the last couple of Java 8 tutorials, you have learned how to use map(), flatMap(), and other stream methods to get an understanding of how Java 8 Stream and Lambda expressions make it easy to perform the bulk data operation on Collection classes like List or Set.
+
+In this Java 8 tutorial, I am going to share how to use the filter() method in Java 8, another key method of Stream class.  This is the one method you will always be used because it forms the key part of Stream pipeline. If you have seen some Java 8 code, you would have already seen this method a couple of time. The filter() method as its name suggests is used to perform filtering based upon some boolean conditions.  The condition is applied to each element of Stream and those who pass the condition moves to the next stage and those who don't get filtered out.
+
+For example,  if you have a stream of integral numbers which contains both even and odd numbers then by using filter method, you can create another stream of even numbers or odd numbers by filtering out others.
+
+Though, filter() method is little bit of counter-intuitive, I mean, in order to create a stream of even number you call filter( i -> i % 2 == 0) which means you do filter(isEven()) but, you are actually filtering out odd numbers to create a new stream of even numbers, but that's how it works.
+
+I think select() would have been a positive and proper name for this operation, but, we don't have any control over that can't change that now.
+
+*
+The key benefit of using filter() method is lazy evaluation i.e. no data comparison is performed unless you call a terminal operation on stream like findFirst() or forEach().
+
+How filter method works in Java 8
+
+In order to learn how to use the filter() method in Java 8, it's important that you also know how it works, at least at a high level. Let's see an example of filter() method to understand the lazy evaluation it does.
+
+Suppose we have a list of integer numbers and we want to find the first number which is divisible by both 2 and 3, let' see how to solve this problem in Java 8.
+
+List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 12, 18); 
+Integer lcm = listOfNumbers.stream() .filter(i -> i % 2 == 0) .filter(i -> i % 3 == 0) .findFirst().get(); 
+* .get() is needed else it will return optional value
+
+Execution steps of the above program
+This code is returning the first the first number which is divisible by both 2 and 3. Now, let's see how this code will execute. When you call the filter() method nothing happens until you call the findFirst().
+
+At this time, Java knows that it just need to find the first element which satisfies the criterion imposed by the two chained filter() methods.
+
+The findFirst() ask the filter() method prior to it in the chain of any number, the filter doesn't have any record so it asks the first filter() method, which in turn then scan the list and return a number which is divisible by 2.
+
+At this time, second filter method checks if this number is divisible by 3, if yes then it returns that number to findFirst() otherwise it asks another number from first filter() method.
+
+This process continues until a number is found which satisfy both filter() methods. Once that number is found it presented to findFirst() method. The job of findFirst() is to return that number.
+
+This is an example of lazy evaluation because nothing happens until the call to findFirst() is a method, this also presents an opportunity to stop as soon as you find the first number which satisfies your criterion.
+
+There is no need to process the entire list again and again, as it happens in the case of iterative eager evaluation.
+
+Java 8 filter Example
+
+Here are a couple of more examples of Stream.filter() method in Java 8. I have created a list of String containing Android versions like  LolliPop, KitKat etc.
+
+The first example just uses one filter() method to print Strings whose length is greater than 10. The second example prints String which contains the letter "e" like Gingerbread.
+
+The Third examples combine these two filter methods to create a chain of filter methods to print String whose length is greater than 5 and starts with a letter "G".
+
+By the way, for testing purpose, you can also create a stream of integers number by using Stream.of() static factory methods as shown in the following example:
+
+You can see that the input stream contains numbers from 1 to 5 but the output stream just contains odd numbers. This means even numbers were filtered out because they didn't satisfy the boolean condition specified by Predicate.
+
+I mean for even number x%2 == 0 and we are checking for x%2 !=0 so they didn't pass the condition and hence not progressed to the output stream.
+
+How to use filter() method in Java 8
+
+Here is a sample Java program to demonstrate how to use the filter() method of Stream class to filter elements from a List or Stream, based upon some conditions, specified by Predicate functional interface of Java 8.
+
+package com.soumyadeep.filterMapDepth;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Java8FilterExample {
+
+	public static void main(String[] args) {
+
+		/*
+		 * Suppose we have a list of integer numbers and we want to find the first
+		 * number which is divisible by both 2 and 3, let' see how to solve this problem
+		 * in Java 8.
+		 */
+
+		List<Integer> listOfNumbers = Arrays.asList(1, 2, 3, 4, 5, 6, 12, 18);
+		Integer divisiby2and3 = listOfNumbers.stream().filter(predicate -> predicate % 2 == 0)
+				.filter(predicate -> predicate % 3 == 0).findFirst().get();
+		System.out.println("number which is divisible by both 2 and 3: " + divisiby2and3);
+
+		List<String> versions = new ArrayList<>();
+		versions.add("Lollipop");
+		versions.add("KitKat");
+		versions.add("Jelly Bean");
+		versions.add("Ice Cream Sandwidth");
+		versions.add("Honeycomb");
+		versions.add("Gingerbread");
+
+		// Using one filter()
+		// print all versions whose length is greater than 10 character
+		System.out.println("All versions whose length greater than 10");
+		versions.stream().filter(p -> p.length() > 10).forEach(p -> System.out.println(p));
+
+		System.out.println("first element which has letter 'e' ");
+		String letterHasE = versions.stream().filter(p -> p.contains("e")).findFirst().get();
+		System.out.println(letterHasE);
+
+		// Using multiple filter
+		System.out.println("Element whose length is > 5 and startswith G");
+		versions.stream().filter(p -> p.length() > 5).filter(p -> p.startsWith("G"))
+				.forEach(p -> System.out.println(p));
+
+	}
+}
+
+That's all in this Java 8 filter() example. It's one of the most useful methods of Stream class and you will find yourself using this method time and again. The best part of this method is that it improves performance by doing lazy evaluation.
+
+The filter() method just setup couple of pointers and no data comparison is performed until a terminal method e.g. forEach() or findFirst() is called.
+
+You can see the Java documentation of filter() method to learn more about it, you can also read check out the following resources to learn more about Stream and other major enhancements made in Java 8.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+Java 8 Stream findFirst() and filter() Example
+
+Suppose, you have a list of prime numbers and you need to find the first prime number which is greater than a given number? How do you find it? Don't tell that you will loop through the list and check each element and return the first element which is greater than the given number. Well, that's right but that's not what you should do in Java 8. That's good for Java 7 or earlier version but Java 8 offers you many better alternatives and one of them is Stream. You can use the Stream class along with filter() and findFirst() methods to find out an element based upon a Predicate, a functional interface for defining a condition which returns a boolean.
+
+The java.util.stream.Stream class provides a couple of find methods to search elements in Stream, findFirst() and findAny().
+
+*
+As the name suggests, the findFirst method returns the first element from the Stream, wrapped in an Optional, but only if the Stream maintains an order e.g. a Stream generated from an ArrayList or LinkedHashMap which keeps elements in order.
+
+If Stream doesn't maintain order then any element will be returning and this is what the findAny() method does. It returns an element from Stream.
+That's why it's not guaranteed to receive the same element if you call this method again.
+
+*
+Both findFirst() and findAny() are short-circuit method, much like short circuit AND (&&) and OR (||) operator which will not evaluate anymore element once they found one. If you are not familiar with what is a short circuit operation in Java, I suggest you go through the Complete Java Masterclass course on Udemy, one of the most comprehensive courses on Java.
+
+
+How to find the first element from a Stream with filter
+
+Now, let's come back to the task at hand. As the problem statement says, we have a list of prime numbers in the increasing order e.g. 2, 3, 5, 7, 11, 13 and we need to find the first prime number which is greater than 5 i.e. our code should return 7.
+
+In order to achieve that we'll first get the Stream from the List and then call the filter() method with the predicate number > 7, after that we'll call the findFirst() method. This will give us the result.
+
+If you remember, filter() is an intermediate method which means after applying a filter, you can still call other methods on stream. It's also lazy which means it will not do anything until you call a terminal method like findFirst(). You can further see The Complete Java SE 8 Developer BootCamp to learn more about Stream features.
+
+The code is simple, except the peek() and get() method. I have used peek() to demonstrate that filter will not do anything until you call the findFirst() method which is a terminal operation.
+
+Since filter() is lazy it will only process the element needed to satisfy the criterion by findFirst() and that's why all elements will not be required to process.
+
+You can see that only 2, 3, 5, and 7 are processed to return the result. It has not touched 11 and 13.
+
+import java.util.Arrays;
+import java.util.List;
+public class Hello { 
+public static void main(String args[]) { 
+List<Integer> primes = Arrays.asList(2, 3, 5, 7, 11, 13); 
+int primeGreaterThanFive = 
+primes.stream().peek(num -> System.out.println("will filter " + num)).filter(x -> x > 5).findFirst().get(); 
+System.out.println(primeGreaterThanFive); 
+} 
+}
+
+Output: 
+will filter 2 
+will filter 3 
+will filter 5 
+will filter 7 
+7
+
+Read more: http://www.java67.com/2018/03/java-8-stream-find-first-and-filter-example.html#ixzz5hW1uWS9z 
+
+Read more: http://www.java67.com/2018/03/java-8-stream-find-first-and-filter-example.html#ixzz5hW1l4aix
+
+If you change the condition to return prime which is greater than 3, then only 2, 3, and 5 will be touched. This provides a big performance boost if you are dealing with a large list e.g. something with 1 million numbers or Strings.
+
+The get() method is used to retrieve a value from Optional return by findFrst() method. If you want you can also use the OrElse() method to define a default value just in case Optional is empty.
+
+Btw, this is an extremely common code if you have started coding in Java because most of my Java 8 refactoring is replacing the loop with a functional equivalent.
+
+That's all about how to find the first element from a List or Stream in Java 8 which satisfy a condition.  As you can see that we can specify the condition using a Predicate, which is nothing but a Functional interface with just one method test(), which returns a boolean. You can use it along with methods like the filter to perform several interesting jobs in Java 8.
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+How to use flatMap() in Java 8 - Stream Example Tutorial
+
+The key point to note here is that the function used by map() operation returns a single value.
+In short, the flatMap() function is used to convert a Stream of Stream into a list of values.
+you can use the flatMap() to flatten a Stream of Stream of values into just a Stream of values.
+This operation is really useful to get the full list by combining several small lists.
+
+
+
+In order to understand the flatMap() method, you first need to understand the map() function of Java 8. The map() function is declared in  the java.util.stream.Stream class and uses to transform one Stream into another, for example, it can convert a stream of integer numbers into another stream of ints where each element is the square of the corresponding element in the source stream. In the map() operation, a function is applied to each element of the source Stream and return values are inserted into a new Stream which is returned to the caller. The key point to note here is that the function used by map() operation returns a single value.
+
+*
+The key point to note here is that the function used by map() operation returns a single value.
+
+Now, if the map operation uses a function which instead of returning a single value returns a Stream of values like when you give a number and it returns all prime factors of the number then you have a Stream of Stream of integers. That's where flatmap function helps.
+
+The flatMap() method can be used to flatten that stream into a Stream of integers. For example, suppose, you have a list of numbers like [21, 23, 42] and we call getPrimeFactors() method along with the map() operation to transform this stream.
+
+The result would be [[3,7],[23],[2,3,7]]. If you want to flatten this stream of a stream into a stream of values, you can use the flatMap() which will finally return [3,7,2,3,2,3,7].
+
+*
+In short, the flatMap() function is used to convert a Stream of Stream into a list of values.
+
+Here is a sample Java program to demonstrate how to use the flatMap() function in Java 8. As I told, you can use the flatMap() to flatten a Stream of Stream of values into just a Stream of values.
+
+*
+you can use the flatMap() to flatten a Stream of Stream of values into just a Stream of values.
+
+In our example, we have a Stream of the list of String and by using the flatMap() we convert this into just a Stream of String to get the full list of players participating in cricket world cup 2019.
+
+*
+This operation is really useful to get the full list by combining several small lists.
+
+package com.soumyadeep.flatMap;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class FlatMapExample {
+
+	public static void main(String[] args) {
+
+		// The key point to note here is that the function used by map() operation
+		// returns a single value.
+		// In short, the flatMap() function is used to convert a Stream of Stream into a
+		// list of values.
+		// you can use the flatMap() to flatten a Stream of Stream of values into just a
+		// Stream of values.
+		// This operation is really useful to get the full list by combining several
+		// small lists.
+
+		List<String> teamIndia = Arrays.asList("Virat", "Dhoni", "Jadeja");
+		List<String> teamAustralia = Arrays.asList("Warner", "Watson", "Smith");
+		List<String> teamEngland = Arrays.asList("Alex", "Bell", "Broad");
+		List<String> teamNewZeland = Arrays.asList("Kane", "Nathan", "Vettori");
+		List<String> teamSouthAfrica = Arrays.asList("AB", "Amla", "Faf");
+		List<String> teamWestIndies = Arrays.asList("Sammy", "Gayle", "Narine");
+		List<String> teamSriLanka = Arrays.asList("Mahela", "Sanga", "Dilshan");
+		List<String> teamPakistan = Arrays.asList("Misbah", "Afridi", "Shehzad");
+
+		List<List<String>> playersInWorldCup2016 = new ArrayList<>();
+		playersInWorldCup2016.add(teamIndia);
+		playersInWorldCup2016.add(teamAustralia);
+		playersInWorldCup2016.add(teamEngland);
+		playersInWorldCup2016.add(teamNewZeland);
+		playersInWorldCup2016.add(teamSouthAfrica);
+		playersInWorldCup2016.add(teamWestIndies);
+		playersInWorldCup2016.add(teamSriLanka);
+		playersInWorldCup2016.add(teamPakistan);
+
+		// Let's print all players before Java 8
+		List<String> allPlayersListBeforeJava8 = new ArrayList<>();
+		for (List<String> list : playersInWorldCup2016) {
+			for (String s : list) {
+				allPlayersListBeforeJava8.add(s);
+			}
+		}
+		System.out.println("Players playing in world cup 2016");
+		System.out.println(allPlayersListBeforeJava8);
+
+		// Now let's do this in Java 8 using FlatMap
+		List<String> flatMapList = playersInWorldCup2016.stream().flatMap(p -> p.stream()).collect(Collectors.toList());
+		System.out.println("List of all Players using Java 8");
+		System.out.println(flatMapList);
+	}
+}
+
+You can see that final list contains all the elements from each list. So flatMap() is working fine to flatten a Stream of List of String into just a Stream of String, that's the true power of flat map operation in Java 8.
+
+
+That's all about how to use the flatMap() function in Java 8.  Just remember the difference between map() and flatMap() in Java 8 and when to use the map() vs flatMap(). If you use a function which returns a list of values in map() operation you get a Stream of Stream and by using flatMap you can convert that to Stream of values.
+
+
+
+
+
+
+
+
+
+
+
